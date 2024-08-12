@@ -1,0 +1,138 @@
+{% extends 'cms/base.html' %}
+{% block title %}Home - Care Connect{% endblock %}
+{% block content %}
+
+<section class="container my-3">
+  {% if messages %}
+  <div class="alert alert-success alert-dismissible fade show" role="alert">
+    {% for message in messages %}
+    {{ message }}
+    {% endfor %}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endif %}
+  <div class="row">
+    <div class="col-md-12">
+      <div id="myCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+          {% for image in carousel_images %}
+          <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="{{ forloop.counter0 }}"
+            class="{% if forloop.first %}active{% endif %}"
+            aria-current="{% if forloop.first %}true{% endif %}"></button>
+          {% endfor %}
+        </div>
+        <div class="carousel-inner rounded-2">
+          {% for image in carousel_images %}
+          <div class="carousel-item {% if forloop.first %}active{% endif %}" data-bs-interval="{{ image.interval }}">
+            <img src="{{ image.image.url }}" class="d-block w-100" alt="">
+          </div>
+          {% endfor %}
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+          <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+          <span class="carousel-control-next-icon" aria-hidden="true"></span>
+          <span class="visually-hidden">Next</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="row mb-4">
+    <div class="col text-center">
+      <h2>Medical Services</h2>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      {% for speciality in specialities %}
+      <div class="col-md-4 mb-4">
+        <div class="card shadow">
+          <img src="{{ speciality.image.url }}" height="270px" class="card-img-top" alt="{{ speciality.name }}">
+          <div class="card-body">
+            <span class="badge {% if speciality.discount > 20 %} bg-success {% elif speciality.discount >= 16 %} 
+              bg-warning {% else %} bg-info {% endif %}">{{speciality.discount }}% OFF</span>
+            <h5 class="card-title">{{ speciality.name }}</h5>
+            <p class="card-text">{{ speciality.description }}</p>
+            <p class="card-text">
+              <small class="text-muted text-decoration-line-through">Rs. {{ speciality.original_price }}</small>
+              Rs. {{ speciality.discounted_price }}
+            </p>
+            <a href="{% url 'find_doctors_by_speciality' speciality.id %}" class="btn btn-primary">Book Now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col text-center">
+        <h2>Other Medical Services</h2>
+      </div>
+    </div>
+    <div class="row">
+      {% for service in services %}
+      <div class="col-md-4 mb-4">
+        <div class="card shadow">
+          <img src="{{ service.image.url }}" height="270px" class="card-img-top" alt="{{ service.name }}">
+          <div class="card-body">
+            <span class="badge bg-{{ service.badge }}">{{ service.discount }}% OFF</span>
+            <h5 class="card-title">{{ service.name }}</h5>
+            <p class="card-text">{{ service.description }}</p>
+            <p class="card-text">
+              <small class="text-muted text-decoration-line-through">Rs. {{ service.original_price }}</small>
+              Rs. {{ service.discounted_price }}
+            </p>
+            <a href="{{ service.url }}" class="btn btn-primary">Book Now</a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<script>
+  // Function to show login message in modal
+  // function showLoginMessage(message) {
+  //   $('#loginMessageText').text(message);
+  //   $('#messageModal').modal('show');
+  // }
+
+  // Check if message exists (from Django messages framework) and show modal
+  // {% if messages %}
+  // {% for message in messages %}
+  // showLoginMessage("{{ message }}");
+  // {% endfor %}
+  // {% endif %}
+  // <!-- Bootstrap Modal -->
+  //   <div class="modal fade" id="messageModal" tabindex="-1" role="dialog" aria-labelledby="messageModalLabel"
+  //     aria-hidden="true">
+  //     <div class="modal-dialog" role="document">
+  //       <div class="modal-content">
+  //         <div class="modal-header">
+  //           <h5 class="modal-title" id="messageModalLabel">Login Message</h5>
+  //           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+  //             <span aria-hidden="true">&times;</span>
+  //           </button>
+  //         </div>
+  //         <div class="modal-body">
+  //           <p id="loginMessageText"></p>
+  //         </div>
+  //         <div class="modal-footer">
+  //           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+  //         </div>
+  //       </div>
+  //     </div>
+  //   </div>
+</script>
+{% endblock %}
